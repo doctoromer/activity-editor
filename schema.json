@@ -1,0 +1,101 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Product",
+    "description": "A product from Acme's catalog",
+    "type": "object",
+    "properties": {
+        "language": {
+            "description": "language of the activity",
+            "type": "string"
+        },
+        "preface": {
+            "description": "a preface to the activity",
+            "type": "string"
+        },
+        "direction": {
+            "description": "display direction of the activity",
+            "type": "string",
+            "pattern": "rtl|ltr"
+        },
+        "title": {
+            "description": "title of the activity",
+            "type": "string"
+        },
+        "author": {
+            "description": "author of the activity",
+            "type": "string"
+        },
+        "content": {
+            "description": "the content of the activity. It is composed of several components",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "the type of the activity component",
+                        "type": "string",
+                        "pattern": "scouting|content|project|meeting|playing|viewpoint"
+                    },
+                    "title": {
+                        "description": "the title of the activity component",
+                        "type": "string"
+                    },
+                    "preface": {
+                        "description": "a preface to the component",
+                        "type": "string"
+                    },
+                    "message": {
+                        "description": "the message of a content component",
+                        "type": "string"
+                    },
+                    "content": {
+                        "description": "the methods that the component is made of",
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "title": {
+                                    "description": "the title of the method",
+                                    "type": "string"
+                                },
+                                "content": {
+                                    "description": "the content of the method",
+                                    "type": "string"
+                                },
+                                "equipment": {
+                                    "description": "the equipment of the the method",
+                                    "type": "string"
+                                },
+                                "time": {
+                                    "description": "the duration of the method",
+                                    "type": "number",
+                                    "exclusiveMinimum": 0
+                                }
+                            },
+                            "required": [
+                                "title",
+                                "content",
+                                "time"
+                            ]
+                        },
+                        "minItems": 1,
+                        "uniqueItems": true
+                    }
+                },
+                "required": [
+                    "type",
+                    "title",
+                    "content"
+                ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        }
+    },
+    "required": [
+        "title",
+        "author",
+        "content"
+    ],
+    "additionalProperties": false
+}

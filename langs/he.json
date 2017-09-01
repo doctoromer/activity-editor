@@ -1,0 +1,22 @@
+{
+    "name": "עברית",
+    "defaultDirection": "rtl",
+    "activityEditor": "עורך פעולות",
+    "by": "מאת",
+    "scouting": "זמן צופיות",
+    "content": "פעילות תוכן",
+    "project": "זמן מסלול",
+    "meeting": "זמן מפקד",
+    "playing": "זמן משחק",
+    "viewpoint": "נקודת מבט",
+    "method": "מתודה",
+    "methodContent": "תוכן המתודה",
+    "equipment": "ציוד",
+    "time": "זמן",
+
+    "activityTitle": "כותרת",
+    "author": "מחבר הפעולה",
+    "componentTitle": "רכיב חדש",
+    "methodTitle": "מתודה חדשה",
+    "additionalInfo": "מידע נוסף..."
+}

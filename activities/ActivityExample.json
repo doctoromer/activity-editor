@@ -1,0 +1,93 @@
+{
+    "language": "en",
+    "direction": "ltr",
+    "title": "activity example",
+    "author": "a leader",
+    "preface": "",
+    "content": [
+        {
+            "type": "scouting",
+            "title": "name of the scout time",
+            "preface": "",
+            "content": [
+                    {
+                        "title": "method's title Z",
+                        "content": "method content",
+                        "equipment": "method equipment",
+                        "time": 15
+                    }
+            ]
+        },
+        {
+            "type": "content",
+            "title": "a question",
+            "preface": "",
+            "content": [
+                {
+                    "title": "method 1",
+                    "content": "method content",
+                    "equipment": "method equipment",
+                    "time": 15
+                },
+                {
+                    "title": "method 2",
+                    "content": "method content",
+                    "equipment": "method equipment",
+                    "time": 15
+                }
+            ]
+        },
+        {
+            "type": "project",
+            "title": "title of the project time",
+            "preface": "",
+            "content": [
+                    {
+                        "title": "method's title Q",
+                        "content": "method content",
+                        "equipment": "method equipment",
+                        "time": 15
+                    }
+            ]
+        },
+        {
+            "type": "meeting",
+            "title": "title of the meeting time",
+            "preface": "",
+            "content": [
+                    {
+                        "title": "method's title R",
+                        "content": "method content",
+                        "equipment": "method equipment",
+                        "time": 15
+                    }
+            ]
+        },
+        {
+            "type": "playing",
+            "title": "name of the playing time",
+            "preface": "",
+            "content": [
+                    {
+                        "title": "method's title X",
+                        "content": "method content",
+                        "equipment": "method equipment",
+                        "time": 15
+                    }
+            ]
+        },
+        {
+            "type": "viewpoint",
+            "title": "name of the viewpoint",
+            "preface": "",
+            "content": [
+                    {
+                        "title": "method's title W",
+                        "content": "method content",
+                        "equipment": "method equipment",
+                        "time": 15
+                    }
+            ]
+        }
+    ]
+}

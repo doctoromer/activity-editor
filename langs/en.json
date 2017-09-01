@@ -1,0 +1,22 @@
+{
+    "name": "english",
+    "defaultDirection": "ltr",
+    "activityEditor": "Activity editor",
+    "by": "by",
+    "scouting": "scouting",
+    "content": "content",
+    "project": "project",
+    "meeting": "meeting",
+    "playing": "playing",
+    "viewpoint": "viewpoint",
+    "method": "method",
+    "methodContent": "method content",
+    "equipment": "equipment",
+    "time": "time",
+
+    "activityTitle": "title",
+    "author": "author",
+    "componentTitle": "new component",
+    "methodTitle": "new method",
+    "additionalInfo": "additional info..."
+}

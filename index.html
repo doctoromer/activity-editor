@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="js/lib/mithril.js"></script>
+    <script src="js/lib/jquery.js"></script>
+    <script src="js/lib/lodash.js"></script>
+    <script src="js/lib/bootstrap.js"></script>
+    <script src="js/lib/filesaver.js"></script>
+    <script src="js/lib/tv4.js"></script>
+    <script src="js/lib/autoresize.js"></script>
+    <script src="js/lib/marked.js"></script>
+
+    <script src="js/index.js"></script>
+    <script src="js/viewComponents.js"></script>
+    <script src="js/editComponents.js"></script>
+    <script src="js/models.js"></script>
+    <script src="js/misc.js"></script>
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/palette.min.css" rel="stylesheet">
+
+    <title>activity editor</title>
+</head>
+<body>
+    <br><br>
+    <span id="hidden-span" style="visibility:hidden;"></span>
+    <div id="navbar-root"></div>
+    <div id="root"></div>
+    <iframe id="hidden-root" class="hidden"></iframe>
+
+    <div id="help" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
