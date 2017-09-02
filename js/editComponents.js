@@ -1,6 +1,6 @@
 function resizeInput() {
     s = $("#hidden-span")
-    val = $(this).val() != "" ? $(this).val() : "*"
+    val = $(this).val() != "" ? $(this).val() : $(this).attr("placeholder")
     s.text(val)
     $(this).width(s.width() + 60);
 }
@@ -200,7 +200,7 @@ var componentEdit = {
                 ),
                 m("div.panel-footer", [
                     m("span.glyphicon.glyphicon-plus", {onclick: _.bind(model.addMethod, cmpt)}), " ",
-                    m("span.glyphicon.glyphicon-trash" + trashClass,
+                    m("span.glyphicon.glyphicon-trash",
                     {
                         ondragover: this.trash.ondragover,
                         ondragleave: this.trash.ondragleave,
@@ -263,7 +263,7 @@ var activityEdit = {
                     trashAttrs = {
                     ondragover: this.trash.ondragover,
                     ondragleave: this.trash.ondragleave,
-                    ondrop: this.trash.ondrop
+                    ondrop: this.trash.ondrop,
                     class: this.trash.hoverIndex != null ? "trash-active" : ""
                 })
             ])
