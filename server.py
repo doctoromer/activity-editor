@@ -5,6 +5,7 @@ import glob
 import os.path as path
 import json
 
+bottle.BaseRequest.MEMFILE_MAX = 1024 * 1024 * 1024
 app = bottle.Bottle()
 CONTENT_DIR = '.'
 
