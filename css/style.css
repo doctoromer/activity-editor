@@ -133,7 +133,7 @@ textarea, textarea:focus {
     .nav-flat li { display: inline; }
     .nav-flat li a {
         display: inline;
-        padding: 7px;
+        padding: 10px;
     }
     .nav-flat li form { display: inline; }
     .nav-flat li form button { display: inline; }
