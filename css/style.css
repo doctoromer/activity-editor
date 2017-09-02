@@ -139,3 +139,7 @@ textarea, textarea:focus {
         width: 90%;
     }
 }
+
+[data-toggle~="collapse"] {
+    cursor: pointer;
+}

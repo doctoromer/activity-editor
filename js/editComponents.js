@@ -130,8 +130,10 @@ var componentEdit = {
             ondragend: _.partial(cmptDnd.ondragend, index),
             ondragover: _.partial(cmptDnd.ondragover, index, cmptDnd),
             ondrop: _.partial(cmptDnd.ondrop, index, cmptDnd),
+            onclick: _.identity,
             draggable: this.draggable,
             href: "#collapseView" + index,
+            "data-target": "#collapseView" + index,
             class: colors[cmpt.type]
         }
 
