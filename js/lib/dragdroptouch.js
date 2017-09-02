@@ -163,8 +163,12 @@ var DragDropTouch;
         };
         // ** event handlers
         DragDropTouch.prototype._touchstart = function (e) {
-            var _this = this, el_name = e.srcElement.tagName;
-            if (this._shouldHandle(e) && el_name != 'INPUT' && el_name != 'SELECT') {
+            var _this = this, el = e.srcElement;
+            if (this._shouldHandle(e)
+                && el.tagName != 'INPUT'
+                && el.tagName != 'SELECT'
+                && el.tagName != 'TEXTAREA'
+                && !el.getAttribute("contenteditable")) {
                 // raise double-click and prevent zooming
                 if (Date.now() - this._lastClick < DragDropTouch._DBLCLICK) {
                     if (this._dispatchEvent(e, 'dblclick', e.target)) {

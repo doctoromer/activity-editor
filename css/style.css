@@ -126,8 +126,15 @@ textarea, textarea:focus {
 }
 
 @media (max-width: 768px) {
+    .nav-flat {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
     .nav-flat li { display: inline; }
-    .nav-flat li a { display: inline; }
+    .nav-flat li a {
+        display: inline;
+        padding: 10px;
+    }
     .nav-flat li form { display: inline; }
     .nav-flat li form button { display: inline; }
     .dropdown-menu li { display: block; }
