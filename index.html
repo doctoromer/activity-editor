@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- libraries files -->
     <script src="js/lib/mithril.js"></script>
     <script src="js/lib/jquery.js"></script>
     <script src="js/lib/lodash.js"></script>
@@ -14,12 +15,15 @@
     <script src="js/lib/marked.js"></script>
     <script src="js/lib/dragdroptouch.js"></script>
 
+    <!-- code files -->
     <script src="js/index.js"></script>
     <script src="js/viewComponents.js"></script>
     <script src="js/editComponents.js"></script>
+    <script src="js/navbar.js"></script>
     <script src="js/models.js"></script>
     <script src="js/misc.js"></script>
 
+    <!-- styling files -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/palette.min.css" rel="stylesheet">
@@ -28,11 +32,16 @@
 </head>
 <body>
     <br><br>
+    <!-- helper element to measure width of autoresizing input elements -->
     <span id="hidden-span" style="visibility:hidden;"></span>
+    <!-- root element of the nabar -->
     <div id="navbar-root"></div>
+    <!-- root element of the activity -->
     <div id="root"></div>
+    <!-- helper element to render html for pdf exporting -->
     <iframe id="hidden-root" class="hidden"></iframe>
 
+    <!-- modal for displaying help page -->
     <div id="help" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">

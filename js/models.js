@@ -1,6 +1,8 @@
+// internationalization variables
 i18n = {}
 lang = {}
 
+// constructors for the model
 function Activity() {
     this.title = ""
     this.author = ""
@@ -24,13 +26,13 @@ function Method() {
     this.time = 10
 }
 
+// the primary model
 model = {
     activity: new Activity(),
     editMode: true,
 
     newActivity: function() {
         this.activity = new Activity()
-        // console.log("newActivity: ", )
     },
 
     toggleEdit: function() {
@@ -71,6 +73,7 @@ model = {
     },
 }
 
+// drag and drop facilities
 dataTransfer = {
     dnd: null
 }
