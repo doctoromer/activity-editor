@@ -138,9 +138,9 @@ navbar = {
         else if((model.activity.direction == "ltr"))
             dir = "right"
 
-        return m("nav.navbar.navbar-inverse.navbar-fixed-top",[
-            m("div.navbar-header",
-                m("a.navbar-brand", lang.activityEditor)),
+        return m("nav.navbar.navbar-inverse.navbar-fixed-top.nav-flat",[
+/*            m("div.navbar-header",
+                m("a.navbar-brand", lang.activityEditor)),*/
             m("ul.nav.navbar-nav", [
                 m("li",
                     m("a.glyphicon.glyphicon-question-sign[data-toggle='modal'][data-target='#help']")

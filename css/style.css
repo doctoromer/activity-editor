@@ -124,3 +124,18 @@ textarea, textarea:focus {
 .hidden {
     display: none;
 }
+
+@media (max-width: 768px) {
+    .nav-flat li { display: inline; }
+    .nav-flat li a { display: inline; }
+    .nav-flat li form { display: inline; }
+    .nav-flat li form button { display: inline; }
+    .dropdown-menu li { display: block; }
+    .dropdown-menu li a { display: block; }
+
+    #main-container {
+        margin-left: 5%;
+        margin-right: 5%;
+        width: 90%;
+    }
+}
