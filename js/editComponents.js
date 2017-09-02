@@ -1,7 +1,8 @@
 function resizeInput() {
     s = $("#hidden-span")
-    s.text($(this).val())
-    $(this).width(s.width() + 30);
+    val = $(this).val() != "" ? $(this).val() : "*"
+    s.text(val)
+    $(this).width(s.width() + 60);
 }
 function autosizeVdom(vnode) {
     autosize(vnode.dom.getElementsByTagName("textarea"))
@@ -66,12 +67,17 @@ var methodEdit = {
                     ]
                 ) :
                 m("h4[contenteditable='true']",
-                    {oninput: m.withAttr("innerHTML", model.setTitle, mthd)},
-                    m.trust(mthd.title
-                )
-            ),
+                    {
+                        oninput: m.withAttr("innerHTML", model.setTitle, mthd),
+                        placeholder: lang.methodTitle
+                    },
+                    m.trust(mthd.title)
+                ),
             m("textarea",
-                {oninput: m.withAttr("value", model.setMethodContent, mthd)},
+                {
+                    oninput: m.withAttr("value", model.setMethodContent, mthd),
+                    placeholder: lang.methodContent
+                },
                 mthd.content
             ),
             m("div", [
@@ -81,6 +87,7 @@ var methodEdit = {
                         oninput: m.withAttr("value", model.setMethodEquipment, mthd),
                         onfocus: this.dragOff.bind(this),
                         onblur: this.dragOn.bind(this),
+                        placeholder: lang.equipment,
                         value: mthd.equipment
                     }
                 )
@@ -168,6 +175,7 @@ var componentEdit = {
                 onclick: stopPropagation,
                 onfocus: this.dragOff.bind(this),
                 onblur: this.dragOn.bind(this),
+                placeholder: lang.componentTitle,
                 value: cmpt.title
             }
         ),
@@ -238,11 +246,17 @@ var activityEdit = {
         return m(selector, {dir: activity.direction}, [
             m("div.panel-body", [
                 m("h1[contenteditable='true']",
-                    {oninput: m.withAttr("innerHTML", model.setTitle, activity)},
+                    {
+                        oninput: m.withAttr("innerHTML", model.setTitle, activity),
+                        placeholder: lang.activityTitle
+                    },
                     m.trust(activity.title)),
                 m("h3.inline", lang.by + ": "),
                 m("h3.inline[contenteditable='true']",
-                    {oninput: m.withAttr("innerHTML", model.setActivityAuthor, activity)},
+                    {
+                        oninput: m.withAttr("innerHTML", model.setActivityAuthor, activity),
+                        placeholder: lang.author
+                    },
                     m.trust(activity.author)
                 ),
                 m("h3", lang.time + ": " + activity.content.map(sumTime).reduce((a, b) => a + b, 0)),

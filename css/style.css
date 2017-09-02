@@ -143,3 +143,8 @@ textarea, textarea:focus {
 [data-toggle~="collapse"] {
     cursor: pointer;
 }
+
+[contenteditable=true]:empty:before{
+    content: attr(placeholder);
+    color: #8e8e8e;
+}

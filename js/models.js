@@ -2,8 +2,8 @@ i18n = {}
 lang = {}
 
 function Activity() {
-    this.title = lang.activityTitle
-    this.author = lang.author
+    this.title = ""
+    this.author = ""
     this.language = _.findKey(i18n, {name: lang.name})
     this.direction = lang.defaultDirection
     this.preface = ""
@@ -12,15 +12,15 @@ function Activity() {
 
 function Component() {
     this.type = "scouting"
-    this.title = lang.componentTitle
+    this.title = ""
     this.preface = ""
     this.content = [new Method()]
 }
 
 function Method() {
-    this.title = lang.methodTitle
-    this.content = lang.methodContent
-    this.equipment = lang.equipment
+    this.title = ""
+    this.content = ""
+    this.equipment = ""
     this.time = 10
 }
 
