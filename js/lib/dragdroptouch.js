@@ -163,8 +163,8 @@ var DragDropTouch;
         };
         // ** event handlers
         DragDropTouch.prototype._touchstart = function (e) {
-            var _this = this;
-            if (this._shouldHandle(e)) {
+            var _this = this, el_name = e.srcElement.tagName;
+            if (this._shouldHandle(e) && el_name != 'INPUT' && el_name != 'SELECT') {
                 // raise double-click and prevent zooming
                 if (Date.now() - this._lastClick < DragDropTouch._DBLCLICK) {
                     if (this._dispatchEvent(e, 'dblclick', e.target)) {
