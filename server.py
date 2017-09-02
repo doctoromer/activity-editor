@@ -38,5 +38,4 @@ def convert_pdf():
     return pdf
 
 
-if __name__ == '__main__':
-    bottle.run(app, host='localhost', port=80)
+application = app
