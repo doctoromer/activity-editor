@@ -168,7 +168,7 @@ var DragDropTouch;
                 && el.tagName != 'INPUT'
                 && el.tagName != 'SELECT'
                 && el.tagName != 'TEXTAREA'
-                && !el.getAttribute("contenteditable")) {
+                && !el.isContentEditable) {
                 // raise double-click and prevent zooming
                 if (Date.now() - this._lastClick < DragDropTouch._DBLCLICK) {
                     if (this._dispatchEvent(e, 'dblclick', e.target)) {
