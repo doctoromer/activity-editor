@@ -1,7 +1,7 @@
 function resizeInput() {
     s = $("#hidden-span")
     s.text($(this).val())
-    $(this).width(s.width() + 5);
+    $(this).width(s.width() + 30);
 }
 function autosizeVdom(vnode) {
     autosize(vnode.dom.getElementsByTagName("textarea"))
@@ -43,9 +43,32 @@ var methodEdit = {
                 classes += ".active"
 
         return m("div.list-group-item" + classes, attrs, [
-            m("h4[contenteditable='true']",
-                {oninput: m.withAttr("innerHTML", model.setTitle, mthd)},
-                m.trust(mthd.title)
+            vnode.attrs.cmptType === "content" ?
+                m("select.form-control.inline",
+                    {
+                        onclick: stopPropagation,
+                        onchange: m.withAttr("value", model.setTitle, mthd),
+                        value: mthd.title
+                    },
+                    [
+                        m("option",{value: lang.contest}, lang.contest),
+                        m("option",{value: lang.action}, lang.action),
+                        m("option",{value: lang.representation}, lang.representation),
+                        m("option",{value: lang.creative}, lang.creative),
+                        m("option",{value: lang.inspiration}, lang.inspiration),
+                        m("option",{value: lang.discussion}, lang.discussion),
+                        m("option",{value: lang.thinking}, lang.thinking),
+                        m("option",{value: lang.sharing}, lang.sharing),
+                        m("option",{value: lang.simulation}, lang.simulation),
+                        m("option",{value: lang.reflection}, lang.reflection),
+                        m("option",{value: lang.explanation}, lang.explanation),
+                        m("option",{value: lang.decomposition}, lang.decomposition)
+                    ]
+                ) :
+                m("h4[contenteditable='true']",
+                    {oninput: m.withAttr("innerHTML", model.setTitle, mthd)},
+                    m.trust(mthd.title
+                )
             ),
             m("textarea",
                 {oninput: m.withAttr("value", model.setMethodContent, mthd)},
@@ -173,7 +196,7 @@ var componentEdit = {
                     m.trust("&nbsp;"),
                     m("div",
                         m("section#methodList" + index + ".list-group", cmpt.content.map((mthd, mthdIndex) =>
-                            m(methodEdit, {obj: mthd, key: mthd.id, index: mthdIndex, dnd: this.mthdDnd})
+                            m(methodEdit, {obj: mthd, index: mthdIndex, cmptType: cmpt.type, dnd: this.mthdDnd})
                         ))
                     ),
                 ),
@@ -230,7 +253,7 @@ var activityEdit = {
                 ),
                 m.trust("&nbsp;"),
                 m("div#components.panel-group", activity.content.map((cmpt, cmptIndex) =>
-                    m(componentEdit, {obj: cmpt, key: cmpt.id, index: cmptIndex, dnd: this.dnd})
+                    m(componentEdit, {obj: cmpt, index: cmptIndex, dnd: this.dnd})
                     )
                 )
             ]),

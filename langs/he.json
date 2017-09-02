@@ -18,5 +18,18 @@
     "author": "מחבר הפעולה",
     "componentTitle": "רכיב חדש",
     "methodTitle": "מתודה חדשה",
-    "additionalInfo": "מידע נוסף..."
+    "additionalInfo": "מידע נוסף...",
+
+    "contest": "משחק תחרות",
+    "action": "עשייה",
+    "representation": "ייצוג",
+    "creative": "הבעה יצירתית",
+    "inspiration": "השראה",
+    "discussion": "דיון בשאלה",
+    "thinking": "חשיבה משותפת", 
+    "sharing": "שיתוף",
+    "simulation": "משחק הדמיה",
+    "reflection": "התבוננות",
+    "explanation": "הסבר",
+    "decomposition": "פירוק"
 }

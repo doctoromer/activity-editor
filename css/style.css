@@ -112,8 +112,9 @@ textarea, textarea:focus {
     resize: none;
     width: 100%;
     border: none;
-    border-color: Transparent;
+    border-color: transparent;
     outline-color: transparent;
+    background-color: transparent;
     outline-style: none;
     display: block;
     overflow: hidden;

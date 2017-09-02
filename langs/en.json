@@ -18,5 +18,18 @@
     "author": "author",
     "componentTitle": "new component",
     "methodTitle": "new method",
-    "additionalInfo": "additional info..."
+    "additionalInfo": "additional info...",
+
+    "contest": "contest",
+    "action": "action",
+    "representation": "representation",
+    "creative": "creative",
+    "inspiration": "inspiration",
+    "discussion": "discussion",
+    "thinking": "thinking", 
+    "sharing": "sharing",
+    "simulation": "simulation",
+    "reflection": "reflection",
+    "explanation": "explanation",
+    "decomposition": "decomposition"
 }
