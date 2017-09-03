@@ -46,8 +46,8 @@ navbar = {
                 ),
                 m("li", m("form",
                     {method: "post", ecntype: "multipart/form-data", action: "/convertPdf"},
-                    m("input[type='hidden'][name='html']", {value: renderPrint()}),
-                    m("a", m("button[type='submit']", m("span.glyphicon.glyphicon-export")))
+                    m("input#render-input[type='hidden'][name='html']"),
+                    m("a", m("button[type='submit']",{onsubmit: renderPrint}, m("span.glyphicon.glyphicon-export")))
                 )),
                 model.editMode ? m("li.dropdown", [
                     m("a.dropdown-toggle[data-toggle='dropdown']", [
@@ -143,7 +143,10 @@ function renderPrint() {
     style = doc.createElement("style")
     style.appendChild(doc.createTextNode(printCss))
     doc.getElementsByTagName("head")[0].appendChild(style)
-    return doc.body.parentElement.outerHTML
+
+    input = document.getElementById("render-input")
+    input.value = doc.body.parentElement.outerHTML
+    return true
 }
 
 printCss = null
