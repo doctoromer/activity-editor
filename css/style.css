@@ -22,6 +22,10 @@ h3 {
     white-space: pre;
 }
 
+strong {
+    white-space: pre;
+}
+
 p {
     margin-bottom: 0px;
 }

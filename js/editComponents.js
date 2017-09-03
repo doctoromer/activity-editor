@@ -133,7 +133,9 @@ var componentEdit = {
         cmpt = vnode.attrs.obj
         index = vnode.attrs.index
         cmptDnd = vnode.attrs.dnd
-
+        panelAttrs = {
+            class: "border-" + borderColors[cmpt.type]
+        }
         headerAttrs = {
             ondragstart: _.partial(cmptDnd.ondragstart, index),
             ondragend: _.partial(cmptDnd.ondragend, index),
@@ -148,8 +150,10 @@ var componentEdit = {
 
         if(cmptDnd.srcIndex == index)
             headerAttrs.class += " transit"
+        if(cmptDnd.dstIndex == index && cmptDnd.dstIndex != cmptDnd.srcIndex)
+            panelAttrs.class += " panel-primary"
 
-        return m("section.panel.border-" + borderColors[cmpt.type], [
+        return m("section.panel", panelAttrs, [
             m("header.panel-heading[data-toggle='collapse']", headerAttrs, [
                 m("select.form-control.inline",
                     {
