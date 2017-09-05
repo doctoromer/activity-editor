@@ -32,8 +32,9 @@ def get_languages():
 
 @app.post('/convertPdf')
 def convert_pdf():
+    html = request.POST['html'].decode('utf8')
     pdf = pdfkit.from_string(
-        request.POST['html'], False, configuration=config)
+        html, False, configuration=config)
     response.set_header('Content-Type', 'application/pdf')
     response.set_header('Content-Disposition', 'attachment')
     return pdf

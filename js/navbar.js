@@ -45,9 +45,15 @@ navbar = {
                     ]
                 ),
                 m("li", m("form",
-                    {method: "post", ecntype: "multipart/form-data", action: "/convertPdf"},
+                    {
+                        method: "post",
+                        ecntype: "multipart/form-data",
+                        action: "/convertPdf",
+                        "accept-charset": "UTF-8",
+                        onsubmit: renderPrint
+                    },
                     m("input#render-input[type='hidden'][name='html']"),
-                    m("a", m("button[type='submit']",{onsubmit: renderPrint}, m("span.glyphicon.glyphicon-export")))
+                    m("a", m("button[type='submit']", m("span.glyphicon.glyphicon-export")))
                 )),
                 model.editMode ? m("li.dropdown", [
                     m("a.dropdown-toggle[data-toggle='dropdown']", [
@@ -140,9 +146,16 @@ function renderPrint() {
     hiddenRoot = document.getElementById("hidden-root")
     doc = hiddenRoot.contentDocument
     m.render(doc.body, m(activityPrint, {obj: model.activity}))
+
+    head = doc.getElementsByTagName("head")[0]
+    meta = doc.createElement("meta")
+
+    meta.setAttribute("charset", "utf8")
+    head.appendChild(meta)
+
     style = doc.createElement("style")
     style.appendChild(doc.createTextNode(printCss))
-    doc.getElementsByTagName("head")[0].appendChild(style)
+    head.appendChild(style)
 
     input = document.getElementById("render-input")
     input.value = doc.body.parentElement.outerHTML
