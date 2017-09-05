@@ -2,16 +2,20 @@ methodView = {
     view: function(vnode) {
         mthd = vnode.attrs.obj
         direction = activity.direction === "rtl" ? "right" : "left"
+        pullDirection = ".pull-" + direction
+
         return m("div.method", [
             m("h4", mthd.title),
             m("br"),
-            m.trust(marked(mthd.content)),
+            m("div",
+                m.trust(marked(mthd.content))
+            ),
             mthd.equipment != "" ? m("div", [
-               m("strong", {style: {float: direction}}, lang.equipment + ": "),
+               m("strong" + pullDirection, lang.equipment + ": "),
                mthd.equipment
             ]) : "",
             m("div", [
-                m("strong", {style: {float: direction}}, lang.time + ": "),
+                m("strong" + pullDirection, lang.time + ": "),
                 mthd.time
             ])
         ])
@@ -30,10 +34,12 @@ componentView = {
             m("div",
                 m("div.panel-body", [
                     m("div", [
-                        m("strong", {style: {float: direction}}, lang.time + ": "),
+                        m("strong.pull-" + direction, lang.time + ": "),
                         sumTime(cmpt)
                     ]),
-                    m.trust(marked(cmpt.preface)),
+                    m("div",
+                        m.trust(marked(cmpt.preface))
+                    ),
                     cmpt.content.length == 1 ? 
                     m(methodView, {obj: cmpt.content[0]}) :
                     m("div", m("section.list-group", cmpt.content.map((mthd, mthdIndex) =>
