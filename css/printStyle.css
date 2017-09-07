@@ -25,6 +25,12 @@ h1 {
   margin: .67em 0;
   font-size: 2em;
 }
+.pull-right {
+  float: right !important;
+}
+.pull-left {
+  float: left !important;
+}
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 @media print {
   *,

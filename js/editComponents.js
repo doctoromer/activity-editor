@@ -7,14 +7,13 @@ function resizeInput() {
 
 function autosizeVdom(vnode) {
     autosize(vnode.dom.getElementsByTagName("textarea"))
-    $('input.invisible-input')
+    $(vnode.dom.getElementsByClassName("invisible-input"))
         .keydown(resizeInput)
         .each(resizeInput)
 }
 
 var methodEdit = {
     oninit: function(vnode) {
-
         this.dnd = vnode.attrs.dnd
         this.draggable = true
     },
@@ -230,7 +229,8 @@ var activityEdit = {
     view: function(vnode) {
         activity = vnode.attrs.obj
 
-        selector = "article#main-container.col-xs-12.col-md-6.col-md-offset-3.panel.panel-default"
+        selector = "article#main-container.panel.panel-default"
+        selector += ".col-xs-10.col-xs-offset-1.col-md-6.col-md-offset-3"
         return m(selector, {dir: activity.direction}, [
             m("div.panel-body", [
                 m("h1[contenteditable='true']",
