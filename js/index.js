@@ -22,11 +22,18 @@ function loadActivity(data) {
             }
         )
     })
+
+    setInterval(function() {
+        localStorage.activity = JSON.stringify(model.activity)
+    }, 3000)
 }
 
 function main() {
-    m.request({url: "template.json"})
-    .then(loadActivity)
+    if(localStorage.activity)
+        loadActivity(JSON.parse(localStorage.activity))
+    else
+        m.request({url: "template.json"})
+        .then(loadActivity)
 }
 
 window.onload = main

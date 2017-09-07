@@ -25,7 +25,7 @@ navbar = {
         return m("nav.navbar.navbar-inverse.navbar-fixed-top.nav-flat", [
             m("ul.nav.navbar-nav", [
                 m("li",
-                    m("a.glyphicon.glyphicon-question-sign[data-toggle='modal'][data-target='#help']")
+                    m("a.glyphicon.glyphicon-question-sign[href='manual.pdf'][target='_blank']")
                 ),
                 m("li",
                     m("a.glyphicon.glyphicon-file",

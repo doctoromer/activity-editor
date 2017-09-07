@@ -142,27 +142,46 @@ nav button:hover {
     color: white;
 }
 
-/* Adjustments for mobile platforms */
+/* override default bootstrap dropdown style */
+.dropdown-menu {
+    min-width: 0px !important;
+    position: absolute !important;
+    background-color: #fff !important;
+    border: 1px solid #ccc !important;
+    border: 1px solid rgba(0, 0, 0, .15) !important;
+    border-radius: 4px !important;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175) !important;
+}
+
+.dropdown-menu li:hover {
+    background-color: #f5f5f5;
+}
+
+/* Adjustments for navbar in mobile platforms */
 
 @media (max-width: 768px) {
-    .nav-flat {
-        padding-left: 20px;
-        padding-right: 20px;
+    .nav-flat > ul {
+        display: -webkit-flex;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        float: none;
+    }
+    .nav-flat > ul {
+        margin-top: 13px;
     }
     .nav-flat li { display: inline; }
-    .nav-flat li a {
+    .nav-flat li a { display: inline; }
+    .nav-flat li form {display: inline; }
+    .nav-flat li form button {
         display: inline;
-        padding: 7px;
+        margin: 0px;
     }
-    .nav-flat li form { display: inline; }
-    .nav-flat li form button { display: inline; }
     .dropdown-menu li { display: block; }
-    .dropdown-menu li a { display: block; }
-
-    #main-container {
-        margin-left: 5%;
-        margin-right: 5%;
-        width: 90%;
+    .dropdown-menu li a {
+        display: block;
+        color: #333 !important;
     }
 }
 
