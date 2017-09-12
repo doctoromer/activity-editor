@@ -1,13 +1,19 @@
 // internationalization variables
-i18n = {}
-lang = {}
+i18n = {
+    langs: {},
+    current: {},
+    setLang: function(code) {
+        this.current = this.langs[code]
+        model.activity.direction = this.current.defaultDirection
+    }
+}
 
 // constructors for the model
 function Activity() {
     this.title = ""
     this.author = ""
-    this.language = _.findKey(i18n, {name: lang.name})
-    this.direction = lang.defaultDirection
+    this.language = i18n.current.code
+    this.direction = i18n.current.defaultDirection
     this.preface = ""
     this.content = [new Component()]
 }
@@ -103,7 +109,6 @@ function Dnd(array) {
     }.bind(this)
 
     this.ondrop = function(index, dnd, event) {
-        console.log("ondrop: ", this)
         this.array.splice(this.dstIndex, 0, this.array.splice(this.srcIndex, 1)[0])
     }.bind(this)
 }

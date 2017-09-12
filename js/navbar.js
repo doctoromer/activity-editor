@@ -1,22 +1,12 @@
 navbar = {
     showWarning: false,
-    oninit: function(vnode) {
-        this.langs = vnode.attrs.langs
-        _.mapKeys(this.langs, (name, code) => {
-            m.request({url: '/langs/' + code + '.json'})
-            .then(function(current_lang) {
-                i18n[code] = current_lang
-                m.redraw()
-            })
-        })
-    },
-    setLang: function(code) {
-        lang = i18n[code]
-        model.activity.direction = lang.defaultDirection
-    },
     view: function(vnode) {
         dir = ""
-        helperFunc = function() {document.getElementById("fileReader").click()}
+        helperFunc = function() {
+            element = document.getElementById("fileReader")
+            element.click()
+            element.value = ""
+        }
         if(model.activity.direction == "rtl")
             dir = "left"
         else if(model.activity.direction == "ltr")
@@ -57,11 +47,17 @@ navbar = {
                 )),
                 model.editMode ? m("li.dropdown", [
                     m("a.dropdown-toggle[data-toggle='dropdown']", [
-                        lang.name,
+                        i18n.current.name,
                         m("span.caret")]
                     ),
-                    m("ul.dropdown-menu", Object.keys(this.langs).map((code) =>
-                        m("li", m("a", {onclick: _.partial(this.setLang, code)}, this.langs[code]))
+
+                    m("ul.dropdown-menu", Object.keys(i18n.langs).map((code) =>
+                        m("li",
+                            m("a",
+                                {onclick: _.partial(i18n.setLang.bind(i18n), code)},
+                                i18n.langs[code].name
+                            )
+                        )
                     ))
                 ]) : "",
                 model.editMode ? m("li",
@@ -86,9 +82,9 @@ activityPrint = {
             m("div.panel-body", [
                 m("h1", activity.title),
                 activity.author != "" ? 
-                m("div", m("h3", lang.by + ": " + activity.author)) : 
+                m("div", m("h3", i18n.current.by + ": " + activity.author)) : 
                 "",
-                m("h3", lang.time + ": " + activity.content.map(sumTime).reduce((a, b) => a + b, 0)),
+                m("h3", i18n.current.time + ": " + activity.content.map(sumTime).reduce((a, b) => a + b, 0)),
                 m.trust(marked(activity.preface)),
                 m.trust("&nbsp;"),
                 m("div.panel-group", activity.content.map((cmpt, cmptIndex) =>
@@ -121,9 +117,9 @@ function readActivity(e) {
                 m.redraw()
             }.bind(this), 5000)
         }
-        if(!this.showWarning) {   
+        if(!this.showWarning) {
             model.activity = activity
-            this.setLang(activity.language)
+            i18n.setLang(activity.language)
         }
         m.redraw()
     }.bind(this)

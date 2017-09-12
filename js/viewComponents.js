@@ -11,11 +11,11 @@ methodView = {
                 m.trust(marked(mthd.content))
             ),
             mthd.equipment != "" ? m("div", [
-               m("strong" + pullDirection, lang.equipment + ": "),
+               m("strong" + pullDirection, i18n.current.equipment + ": "),
                mthd.equipment
             ]) : "",
             m("div", [
-                m("strong" + pullDirection, lang.time + ": "),
+                m("strong" + pullDirection, i18n.current.time + ": "),
                 mthd.time
             ])
         ])
@@ -30,11 +30,11 @@ componentView = {
 
         return m("section.panel.border-" + borderColors[cmpt.type], [
             m("header.panel-heading",
-                {class: colors[cmpt.type]}, lang[cmpt.type] + " - " + cmpt.title),
+                {class: colors[cmpt.type]}, i18n.current[cmpt.type] + " - " + cmpt.title),
             m("div",
                 m("div.panel-body", [
                     m("div", [
-                        m("strong.pull-" + direction, lang.time + ": "),
+                        m("strong.pull-" + direction, i18n.current.time + ": "),
                         sumTime(cmpt)
                     ]),
                     m("div",
@@ -56,7 +56,7 @@ componentViewSingleMethod = {
         cmpt = vnode.attrs.obj
         index = vnode.attrs.index
         mthd = _.cloneDeep(cmpt.content[0])
-        mthd.title = lang[cmpt.type] + " - " + mthd.title
+        mthd.title = i18n.current[cmpt.type] + " - " + mthd.title
 
         return m("section.panel.border-" + colors[cmpt.type],
             m("div",
@@ -81,9 +81,9 @@ activityView = {
             m("div.panel-body", [
                 m("h1", activity.title),
                 activity.author != "" ? 
-                m("div", m("h3", lang.by + ": " + activity.author)) : 
+                m("div", m("h3", i18n.current.by + ": " + activity.author)) : 
                 "",
-                m("h3", lang.time + ": " + activity.content.map(sumTime).reduce((a, b) => a + b, 0)),
+                m("h3", i18n.current.time + ": " + activity.content.map(sumTime).reduce((a, b) => a + b, 0)),
                 m.trust(marked(activity.preface)),
                 m.trust("&nbsp;"),
                 m("div.panel-group", activity.content.map((cmpt, cmptIndex) =>

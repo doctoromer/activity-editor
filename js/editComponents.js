@@ -6,8 +6,12 @@ function resizeInput() {
 }
 
 function autosizeVdom(vnode) {
-    autosize(vnode.dom.getElementsByTagName("textarea"))
-    $(vnode.dom.getElementsByClassName("invisible-input"))
+    dom = $(vnode.dom)
+    autosize(dom.find("textarea"))
+    $(".collapse").on('shown.bs.collapse', function() {
+        autosize.update($(this).find("textarea"))
+    })
+    dom.find(".invisible-input")
         .keydown(resizeInput)
         .each(resizeInput)
 }
@@ -17,7 +21,6 @@ var methodEdit = {
         this.dnd = vnode.attrs.dnd
         this.draggable = true
     },
-    oncreate: autosizeVdom,
     dragOn: function() {
         this.draggable = true
         console.log(this.draggable)
@@ -55,48 +58,48 @@ var methodEdit = {
                     value: mthd.title
                 },
                 [
-                    m("option",{value: lang.contest}, lang.contest),
-                    m("option",{value: lang.action}, lang.action),
-                    m("option",{value: lang.representation}, lang.representation),
-                    m("option",{value: lang.creative}, lang.creative),
-                    m("option",{value: lang.inspiration}, lang.inspiration),
-                    m("option",{value: lang.discussion}, lang.discussion),
-                    m("option",{value: lang.thinking}, lang.thinking),
-                    m("option",{value: lang.sharing}, lang.sharing),
-                    m("option",{value: lang.simulation}, lang.simulation),
-                    m("option",{value: lang.reflection}, lang.reflection),
-                    m("option",{value: lang.explanation}, lang.explanation),
-                    m("option",{value: lang.decomposition}, lang.decomposition)
+                    m("option",{value: i18n.current.contest}, i18n.current.contest),
+                    m("option",{value: i18n.current.action}, i18n.current.action),
+                    m("option",{value: i18n.current.representation}, i18n.current.representation),
+                    m("option",{value: i18n.current.creative}, i18n.current.creative),
+                    m("option",{value: i18n.current.inspiration}, i18n.current.inspiration),
+                    m("option",{value: i18n.current.discussion}, i18n.current.discussion),
+                    m("option",{value: i18n.current.thinking}, i18n.current.thinking),
+                    m("option",{value: i18n.current.sharing}, i18n.current.sharing),
+                    m("option",{value: i18n.current.simulation}, i18n.current.simulation),
+                    m("option",{value: i18n.current.reflection}, i18n.current.reflection),
+                    m("option",{value: i18n.current.explanation}, i18n.current.explanation),
+                    m("option",{value: i18n.current.decomposition}, i18n.current.decomposition)
                 ]
             ) :
             m("h4[contenteditable='true']",
                 {
                     oninput: m.withAttr("innerHTML", model.setTitle, mthd),
-                    placeholder: lang.methodTitle
+                    placeholder: i18n.current.methodTitle
                 },
                 m.trust(mthd.title)
             ),
             m("textarea",
                 {
                     oninput: m.withAttr("value", model.setMethodContent, mthd),
-                    placeholder: lang.methodContent
+                    placeholder: i18n.current.methodContent
                 },
                 mthd.content
             ),
             m("div", [
-               m("strong", lang.equipment + ": "),
+               m("strong", i18n.current.equipment + ": "),
                m("input.invisible-input",
                     {
                         oninput: m.withAttr("value", model.setMethodEquipment, mthd),
                         onfocus: this.dragOff.bind(this),
                         onblur: this.dragOn.bind(this),
-                        placeholder: lang.equipment,
+                        placeholder: i18n.current.equipment,
                         value: mthd.equipment
                     }
                 )
             ]),
             m("div", [
-                m("strong", lang.time + ": "),
+                m("strong", i18n.current.time + ": "),
                 m("input.invisible-input[type='number']",
                     {
                         oninput: m.withAttr("value", model.setMethodTime, mthd),
@@ -121,7 +124,6 @@ var componentEdit = {
         this.mthdDnd.array = vnode.attrs.obj.content
         this.trash.dnd = this.mthdDnd
     },
-    oncreate: autosizeVdom,
     dragOn: function() {
         this.draggable = true
     },
@@ -161,12 +163,12 @@ var componentEdit = {
                         value: cmpt.type
                     },
                     [
-                        m("option[value='scouting']", lang.scouting),
-                        m("option[value='content']", lang.content),
-                        m("option[value='project']", lang.project),
-                        m("option[value='meeting']", lang.meeting),
-                        m("option[value='playing']", lang.playing),
-                        m("option[value='viewpoint']", lang.viewpoint)
+                        m("option[value='scouting']", i18n.current.scouting),
+                        m("option[value='content']", i18n.current.content),
+                        m("option[value='project']", i18n.current.project),
+                        m("option[value='meeting']", i18n.current.meeting),
+                        m("option[value='playing']", i18n.current.playing),
+                        m("option[value='viewpoint']", i18n.current.viewpoint)
                     ]
                 ),
                 m("div.inline",{style: {whiteSpace: "pre"}}, " - "),
@@ -176,7 +178,9 @@ var componentEdit = {
                         onclick: stopPropagation,
                         onfocus: this.dragOff.bind(this),
                         onblur: this.dragOn.bind(this),
-                        placeholder: lang.componentTitle,
+                        placeholder: cmpt.content.length == 1 && cmpt.title == "" ?
+                            cmpt.content[0].title :
+                            i18n.current.componentTitle,
                         value: cmpt.title
                     }
                 )
@@ -184,13 +188,13 @@ var componentEdit = {
             m("div#collapseView" + index + ".panel-collapse.collapse",
                 m("div.panel-body",
                     m("div", [
-                        m("strong", lang.time + ": "),
+                        m("strong", i18n.current.time + ": "),
                         sumTime(cmpt)
                     ]),
                     m("textarea",
                         {
                             oninput: m.withAttr("value", model.setPreface, cmpt),
-                            placeholder: lang["additionalInfo"]
+                            placeholder: i18n.current["additionalInfo"]
                         },
                         cmpt.preface
                     ),
@@ -236,22 +240,22 @@ var activityEdit = {
                 m("h1[contenteditable='true']",
                     {
                         oninput: m.withAttr("innerHTML", model.setTitle, activity),
-                        placeholder: lang.activityTitle
+                        placeholder: i18n.current.activityTitle
                     },
                     m.trust(activity.title)),
-                m("h3.inline", lang.by + ": "),
+                m("h3.inline", i18n.current.by + ": "),
                 m("h3.inline[contenteditable='true']",
                     {
                         oninput: m.withAttr("innerHTML", model.setActivityAuthor, activity),
-                        placeholder: lang.author
+                        placeholder: i18n.current.author
                     },
                     m.trust(activity.author)
                 ),
-                m("h3", lang.time + ": " + activity.content.map(sumTime).reduce((a, b) => a + b, 0)),
+                m("h3", i18n.current.time + ": " + activity.content.map(sumTime).reduce((a, b) => a + b, 0)),
                 m("textarea",
                     {
                         oninput: m.withAttr("value", model.setPreface, activity),
-                        placeholder: lang["additionalInfo"]
+                        placeholder: i18n.current["additionalInfo"]
                     },
                     activity.preface
                 ),

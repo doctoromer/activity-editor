@@ -1,9 +1,35 @@
 import bottle
 from bottle import request, response
-from weasyprint import HTML
 import glob
 import os.path as path
 import json
+
+is_server = None
+try:
+    import pdfkit
+except ImportError:
+    try:
+        from weasyprint import HTML
+    except ImportError:
+        import sys
+        print('no pdfkit or weasyPrint is installed. exiting...')
+        sys.exit(1)
+    else:
+        is_server = True
+
+        def convert(html):
+            return HTML(string=html).write_pdf()
+else:
+    is_server = False
+    config = pdfkit.configuration(
+        wkhtmltopdf='wkhtmltopdf/bin/wkhtmltopdf.exe')
+
+    def convert(html):
+        try:
+            html = html.decode('utf8')
+        except Exception:
+            pass
+        return pdfkit.from_string(html, False, configuration=config)
 
 bottle.BaseRequest.MEMFILE_MAX = 1024 * 1024 * 1024
 app = bottle.Bottle()
@@ -22,20 +48,28 @@ def static(path):
 
 @app.route('/langs')
 def get_languages():
-    def get_name(path):
-        with open(path, 'r') as f:
-            return json.load(f)['name']
-    ls = glob.glob(CONTENT_DIR + '/langs/*.json')
-    langs = dict((path.splitext(path.basename(p))[0], get_name(p)) for p in ls)
-    return langs
+    def read_file(filename):
+        with open(filename, 'r') as f:
+            return json.load(f)
+
+    def get_code(file_path):
+        return path.splitext(path.basename(file_path))[0]
+
+    files = glob.glob(CONTENT_DIR + '/langs/*.json')
+    langs = dict((get_code(p), read_file(p)) for p in files)
+
+    return json.dumps(langs, ensure_ascii=False).encode('utf8')
 
 
 @app.post('/convertPdf')
 def convert_pdf():
-    pdf = HTML(string=request.POST['html']).write_pdf()
+    pdf = convert(request.POST['html'])
     response.set_header('Content-Type', 'application/pdf')
     response.set_header('Content-Disposition', 'attachment')
     return pdf
 
 
-application = app
+if is_server:
+    application = app
+elif __name__ == '__main__':
+    bottle.run(app, host='localhost', port=80)
