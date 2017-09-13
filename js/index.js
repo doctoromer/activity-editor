@@ -1,18 +1,14 @@
 function main() {
     m.request({url: "/langs"})
-    .then(function(langs) {
-        i18n.langs = langs
-    })
-    .then(function() {
-        m.mount(document.getElementById("navbar-root"), navbar)
-    })
-    .then(function() {
+    .then((langs) => i18n.langs = langs)
+    .then(() => m.mount(document.getElementById("navbar-root"), navbar))
+    .then(() => {
         if(localStorage.activity)
             return JSON.parse(localStorage.activity)
         else
             return m.request({url: "template.json"})
     })
-    .then(function(activity) {
+    .then((activity) => {
         model.activity = activity
         i18n.setLang(activity.language)
         m.mount(document.getElementById("root"), 
@@ -22,9 +18,7 @@ function main() {
                 }
             }
         )
-        setInterval(function() {
-            localStorage.activity = JSON.stringify(model.activity)
-        }, 3000)
+        setInterval(() => localStorage.activity = JSON.stringify(model.activity), 3000)
     })
 }
 

@@ -9,27 +9,33 @@ i18n = {
 }
 
 // constructors for the model
-function Activity() {
-    this.title = ""
-    this.author = ""
-    this.language = i18n.current.code
-    this.direction = i18n.current.defaultDirection
-    this.preface = ""
-    this.content = [new Component()]
+class Activity {
+    constructor() {
+        this.title = ""
+        this.author = ""
+        this.language = i18n.current.code
+        this.direction = i18n.current.defaultDirection
+        this.preface = ""
+        this.content = [new Component()]
+    }
 }
 
-function Component() {
-    this.type = "scouting"
-    this.title = ""
-    this.preface = ""
-    this.content = [new Method()]
+class Component {    
+    constructor() {
+        this.type = "scouting"
+        this.title = ""
+        this.preface = ""
+        this.content = [new Method()]
+    }
 }
 
-function Method() {
-    this.title = ""
-    this.content = ""
-    this.equipment = ""
-    this.time = 10
+class Method {
+    constructor() {
+        this.title = ""
+        this.content = ""
+        this.equipment = ""
+        this.time = 10
+    }
 }
 
 // the primary model
@@ -84,52 +90,56 @@ dataTransfer = {
     dnd: null
 }
 
-function Dnd(array) {
-    this.srcIndex = null
-    this.dstIndex = null
-    this.array = array
+class Dnd {
+    constructor(array) {
+        this.srcIndex = null
+        this.dstIndex = null
+        this.array = array
+    }
 
-    this.ondragstart = function(index, event) {
+    ondragstart(index, event) {
         this.srcIndex = index
         dataTransfer.dnd = this
-    }.bind(this)
-    this.ondragend = function(index, event) {
+    }
+
+    ondragend(index, event) {
         this.srcIndex = null
         this.dstIndex = null
         dataTransfer.dnd = null
-    }.bind(this)
+    }
 
-    this.ondragover = function(index, dnd, event) {
-        if(dataTransfer.dnd == this){
+    ondragover(index, dnd, event) {
+        if(dataTransfer.dnd == this) {
             event.preventDefault()
-            if(this.dstIndex != index) {
+            if(this.dstIndex != index)
                 this.dstIndex = index
-            }
         }
-    }.bind(this)
+    }
 
-    this.ondrop = function(index, dnd, event) {
+    ondrop(index, event) {
         this.array.splice(this.dstIndex, 0, this.array.splice(this.srcIndex, 1)[0])
-    }.bind(this)
+    }
 }
 
-function Trash(dnd) {
-    this.hoverIndex = null
-    this.dnd = dnd
+class Trash {
+    constructor(dnd) {
+        this.hoverIndex = null
+        this.dnd = dnd
+    }
 
-    this.ondragover = function(event) {
+    ondragover(event) {
         if(this.dnd == dataTransfer.dnd) {
             event.preventDefault()
             this.hoverIndex = dnd.srcIndex
         }
-    }.bind(this)
+    }
 
-    this.ondragleave = function() {
+    ondragleave() {
         this.hoverIndex = null
-    }.bind(this)
+    }
 
-    this.ondrop = function() {
+    ondrop() {
         this.dnd.array.splice(this.dnd.srcIndex, 1)
         this.hoverIndex = null
-    }.bind(this)
+    }
 }

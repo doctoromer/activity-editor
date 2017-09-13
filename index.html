@@ -11,17 +11,15 @@
     <script src="js/lib/bootstrap.js"></script>
     <script src="js/lib/filesaver.js"></script>
     <script src="js/lib/tv4.js"></script>
-    <script src="js/lib/autoresize.js"></script>
+    <script src="js/lib/autosize.js"></script>
     <script src="js/lib/marked.js"></script>
-    <script src="js/lib/dragdroptouch.js"></script>
+    <!-- <script src="js/lib/dragdroptouch.js"></script> -->
 
     <!-- code files -->
     <script src="js/index.js"></script>
-    <script src="js/viewComponents.js"></script>
-    <script src="js/editComponents.js"></script>
+    <script src="js/view.js"></script>
     <script src="js/navbar.js"></script>
     <script src="js/models.js"></script>
-    <script src="js/misc.js"></script>
 
     <!-- styling files -->
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -31,7 +29,6 @@
     <title>activity editor</title>
 </head>
 <body>
-    <br><br>
     <!-- helper element to measure width of autoresizing input elements -->
     <span id="hidden-span" style="visibility:hidden;"></span>
     <!-- root element of the nabar -->
@@ -40,5 +37,15 @@
     <div id="root"></div>
     <!-- helper element to render html for pdf exporting -->
     <iframe id="hidden-root" class="hidden"></iframe>
+    <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-106424726-1', 'auto');
+          ga('send', 'pageview');
+
+    </script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 /* General styling */
 
 #main-container {
-    margin-top: 20px;
+    margin-top: 40px;
     padding: 0px;
 }
 
@@ -36,6 +36,10 @@ p {
 
 .hidden {
     display: none;
+}
+
+.invisible {
+    visibility: hidden;
 }
 
 /* Input styling */
@@ -90,11 +94,14 @@ textarea, textarea:focus {
 select.form-control {
     width: auto;
     height: 50%;
-    padding: 3px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 0px;
+    padding-right:0px;
     font-size: 10px;
 }
 
-/* Component leve styling */
+/* Component styling */
 
 .list-group {
     margin-bottom: 5px;
@@ -102,16 +109,6 @@ select.form-control {
 
 .transit {
     opacity: 0.5;
-}
-
-.heading-right {
-  padding-left: 0px;
-  padding-right: 10px;
-}
-
-.heading-left {
-  padding-left: 10px;
-  padding-right: 0px;
 }
 
 .trash-active {
@@ -123,7 +120,11 @@ select.form-control {
 }
 
 div + .method, .list-group {
-    margin-top:10px;
+    margin-top: 10px;
+}
+
+.panel-heading {
+    padding: 7px;
 }
 
 /* navbar styling */
@@ -158,9 +159,13 @@ nav button:hover {
     background-color: #f5f5f5;
 }
 
-/* Adjustments for navbar in mobile platforms */
+/* Adjustments for mobile platforms */
 
 @media (max-width: 768px) {
+    #main-container {
+        margin-top: 20px;
+        margin-bottom: 0px;
+    }
     .nav-flat > ul {
         display: -webkit-flex;
         display: flex;

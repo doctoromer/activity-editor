@@ -1,12 +1,14 @@
 navbar = {
     showWarning: false,
     view: function(vnode) {
-        dir = ""
-        helperFunc = function() {
+
+        helperFunc = () => {
             element = document.getElementById("fileReader")
             element.click()
             element.value = ""
         }
+
+        dir = ""
         if(model.activity.direction == "rtl")
             dir = "left"
         else if(model.activity.direction == "ltr")
@@ -45,7 +47,7 @@ navbar = {
                     m("input#render-input[type='hidden'][name='html']"),
                     m("a", m("button[type='submit']", m("span.glyphicon.glyphicon-export")))
                 )),
-                model.editMode ? m("li.dropdown", [
+                m("li.dropdown", {class: !model.editMode ? "invisible" : ""}, [
                     m("a.dropdown-toggle[data-toggle='dropdown']", [
                         i18n.current.name,
                         m("span.caret")]
@@ -59,12 +61,12 @@ navbar = {
                             )
                         )
                     ))
-                ]) : "",
-                model.editMode ? m("li",
+                ]),
+                m("li", {class: !model.editMode ? "invisible" : ""},
                     m("a.glyphicon.glyphicon-triangle-" + dir,
                         {onclick: model.toggleDirection.bind(model)}
                     )
-                ) : "",
+                ),
                 this.showWarning ? m("li",
                     m("a",
                         m("span.label.label-warning", "bad input")
@@ -101,8 +103,9 @@ function readActivity(e) {
     file = document.getElementById("fileReader").files[0]
     if(!file)
         return
+
     reader = new FileReader()
-    reader.onload = function(e) {
+    reader.onload = (e) => {
         activity = null
         try {
             activity = JSON.parse(reader.result)
@@ -112,30 +115,28 @@ function readActivity(e) {
         }
         catch(e) {
             this.showWarning = true
-            setTimeout(function() {
+            setTimeout(() => {
                 this.showWarning = false
                 m.redraw()
-            }.bind(this), 5000)
+            }, 5000)
         }
         if(!this.showWarning) {
             model.activity = activity
             i18n.setLang(activity.language)
         }
         m.redraw()
-    }.bind(this)
+    }
+
     reader.readAsText(file)
 }
 
 function downloadActivity() {
-    content = JSON.stringify(model.activity)
-    downloadFile(content, model.activity.title + ".json")
-}
-
-invalidChars = ["\\", "/", ":", "*", "?", "\"", "<", ">", "|"]
-function downloadFile(content, name) {
-    invalidChars.map((char) => name.replace(char, "_"))
-    var blob = new Blob([content], {type: "text/plain;charset=utf-8"})
-    saveAs(blob, name)
+    blob = new Blob(
+        [JSON.stringify(model.activity)],
+        {type: "application/json"}
+    )
+    baseName = model.activity.title ? model.activity.title : "activity"
+    saveAs(blob, baseName + ".json")
 }
 
 function renderPrint() {
@@ -162,13 +163,9 @@ printCss = null
 m.request({
     url: "/css/printStyle.css",
     deserialize: _.identity
-}).then(function(value) {
-    printCss = value
 })
+.then((value) => printCss = value)
 
 schema = null
-m.request({
-    url: "/schema.json",
-}).then(function(value) {
-    schema = value
-})
+m.request({url: "/schema.json"})
+.then((value) => schema = value)
