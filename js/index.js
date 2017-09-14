@@ -20,6 +20,15 @@ function main() {
         )
         setInterval(() => localStorage.activity = JSON.stringify(model.activity), 3000)
     })
+
+    m.request({
+        url: "/css/printStyle.css",
+        deserialize: _.identity
+    })
+    .then((value) => activityActions.printCss = value)
+
+    m.request({url: "/schema.json"})
+    .then((value) => activityActions.schema = value)
 }
 
 window.onload = main

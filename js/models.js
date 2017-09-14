@@ -51,10 +51,13 @@ model = {
         this.editMode = !this.editMode
     },
     toggleDirection: function() {
-        if(this.activity.direction == "rtl")
+        if(this.activity.direction === "rtl")
             this.activity.direction = "ltr"
         else
             this.activity.direction = "rtl"
+    },
+    directionName: function(withDirection) {
+        return withDirection === (this.activity.direction === "rtl") ? "right" : "left"
     },
     setTitle: function(value) {
         this.title = value
@@ -71,6 +74,10 @@ model = {
     addComponent: function(value) {
         this.content.push(new Component())
     },
+    removeComponent: function(index) {
+        console.log(this)
+        this.activity.content.splice(index, 1)
+    },
     setMethodContent: function(value) {
         this.content = value
     },
@@ -82,6 +89,9 @@ model = {
     },
     addMethod: function(value) {
         this.content.push(new Method())
+    },
+    removeMethod: function(index, cmpt) {
+        cmpt.content.splice(index, 1)
     },
 }
 
@@ -109,7 +119,7 @@ class Dnd {
     }
 
     ondragover(index, dnd, event) {
-        if(dataTransfer.dnd == this) {
+        if(dataTransfer.dnd === this) {
             event.preventDefault()
             if(this.dstIndex != index)
                 this.dstIndex = index
@@ -118,28 +128,5 @@ class Dnd {
 
     ondrop(index, event) {
         this.array.splice(this.dstIndex, 0, this.array.splice(this.srcIndex, 1)[0])
-    }
-}
-
-class Trash {
-    constructor(dnd) {
-        this.hoverIndex = null
-        this.dnd = dnd
-    }
-
-    ondragover(event) {
-        if(this.dnd == dataTransfer.dnd) {
-            event.preventDefault()
-            this.hoverIndex = dnd.srcIndex
-        }
-    }
-
-    ondragleave() {
-        this.hoverIndex = null
-    }
-
-    ondrop() {
-        this.dnd.array.splice(this.dnd.srcIndex, 1)
-        this.hoverIndex = null
     }
 }

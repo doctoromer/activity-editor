@@ -26,8 +26,7 @@ function sumTime(obj) {
 class methodView {
     view(vnode) {
         var mthd = vnode.attrs.obj
-        var direction = model.activity.direction === "rtl" ? "right" : "left"
-        var pullDirection = ".pull-" + direction
+        var pullDirection = ".pull-" + model.directionName(true)
 
         return m("div.method", [
             m("h4", mthd.title),
@@ -51,7 +50,6 @@ class componentView {
     view(vnode) {
         var cmpt = vnode.attrs.obj
         var index = vnode.attrs.index
-        var direction = model.activity.direction === "rtl" ? "right" : "left"
 
         return m("section.panel.border-" + borderColors[cmpt.type], [
             m("header.panel-heading",
@@ -59,13 +57,13 @@ class componentView {
             m("div",
                 m("div.panel-body", [
                     m("div", [
-                        m("strong.pull-" + direction, i18n.current.time + ": "),
+                        m("strong.pull-" + model.directionName(true), i18n.current.time + ": "),
                         sumTime(cmpt)
                     ]),
                     m("div",
                         m.trust(marked(cmpt.preface))
                     ),
-                    cmpt.content.length == 1 ? 
+                    cmpt.content.length === 1 ? 
                     m(methodView, {obj: cmpt.content[0]}) :
                     m("div", m("section.list-group", cmpt.content.map((mthd, mthdIndex) =>
                         m(methodView, {obj: mthd, index: mthdIndex})
@@ -87,7 +85,7 @@ class componentViewSingleMethod {
             m("div",
                 {class: colors[cmpt.type]},
                 m("div.panel-body", 
-                    cmpt.content.length == 1 ? 
+                    cmpt.content.length === 1 ? 
                     m(methodView, {obj: mthd}) :
                     m("div", m("section.list-group", cmpt.content.map((mthd, mthdIndex) =>
                         m(methodView, {obj: mthd, index: mthdIndex})
@@ -111,7 +109,7 @@ class activityView {
                 m.trust(marked(activity.preface)),
                 m.trust("&nbsp;"),
                 m("div.panel-group", activity.content.map((cmpt, cmptIndex) =>
-                    cmpt.content.length == 1 && cmpt.title == ""
+                    cmpt.content.length === 1 && cmpt.title === ""
                     ? m(componentViewSingleMethod, {obj: cmpt, index: cmptIndex})
                     : m(componentView, {obj: cmpt, index: cmptIndex})
                 ))
@@ -148,14 +146,14 @@ class methodEdit {
             class: ""
         }
 
-        if(this.dnd.srcIndex == index)
+        if(this.dnd.srcIndex === index)
             attrs.class += "transit "
 
-        if(this.dnd.dstIndex == index && this.dnd.dstIndex != this.dnd.srcIndex)
+        if(this.dnd.dstIndex === index && this.dnd.dstIndex != this.dnd.srcIndex)
             attrs.class += "active"
 
         return m("div.list-group-item", attrs, [
-            vnode.attrs.cmptType === "content" ?
+            vnode.attrs.cmpt.type === "content" ?
                 m("select.form-control.inline",
                     {
                         onclick: (e) => e.stopPropagation(),
@@ -184,6 +182,9 @@ class methodEdit {
                     },
                     m.trust(mthd.title)
                 ),
+            m("span.glyphicon.glyphicon-remove.pull-" + model.directionName(false),
+                {onclick: () => model.removeMethod(index, vnode.attrs.cmpt)}
+            ),
             m("textarea",
                 {
                     oninput: m.withAttr("value", model.setMethodContent, mthd),
@@ -222,13 +223,11 @@ class methodEdit {
 class componentEdit {
     oninit(vnode) {
         this.mthdDnd = new Dnd(vnode.attrs.obj.content)
-        this.trash = new Trash(this.mthdDnd)
         this.draggable = true
     }
 
     onupdate(vnode) {
         this.mthdDnd.array = vnode.attrs.obj.content
-        this.trash.dnd = this.mthdDnd
     }
 
     dragOn() {
@@ -258,9 +257,9 @@ class componentEdit {
             class: colors[cmpt.type]
         }
 
-        if(cmptDnd.srcIndex == index)
+        if(cmptDnd.srcIndex === index)
             headerAttrs.class += " transit"
-        if(cmptDnd.dstIndex == index && cmptDnd.dstIndex != cmptDnd.srcIndex)
+        if(cmptDnd.dstIndex === index && cmptDnd.dstIndex != cmptDnd.srcIndex)
             panelAttrs.class += " panel-primary"
 
         return m("section.panel", panelAttrs, [
@@ -287,11 +286,12 @@ class componentEdit {
                         onclick: (e) => e.stopPropagation(),
                         onfocus: this.dragOff.bind(this),
                         onblur: this.dragOn.bind(this),
-                        placeholder: (cmpt.content.length == 1 && cmpt.content[0]) ?
-                            cmpt.content[0].title :
-                            i18n.current.componentTitle,
+                        placeholder: i18n.current.componentTitle,
                         value: cmpt.title
                     }
+                ),
+                m("span.glyphicon.glyphicon-remove.pull-" + model.directionName(false),
+                    {onclick: () => model.removeComponent(index)}
                 )
             ]),
             m("div#collapseView" + index + ".panel-collapse.collapse",
@@ -310,19 +310,15 @@ class componentEdit {
                     m.trust("&nbsp;"),
                     m("div",
                         m("section#methodList" + index + ".list-group", cmpt.content.map((mthd, mthdIndex) =>
-                            m(methodEdit, {obj: mthd, index: mthdIndex, cmptType: cmpt.type, dnd: this.mthdDnd})
+                            m(methodEdit, {obj: mthd, index: mthdIndex, cmpt: cmpt, dnd: this.mthdDnd})
                         ))
                     ),
                 ),
                 m("div.panel-footer", [
-                    m("span.glyphicon.glyphicon-plus", {onclick: _.bind(model.addMethod, cmpt)}), " ",
-                    m("span.glyphicon.glyphicon-trash",
-                    {
-                        ondragover: this.trash.ondragover.bind(this.trash),
-                        ondragleave: this.trash.ondragleave.bind(this.trash),
-                        ondrop: this.trash.ondrop.bind(this.trash),
-                        class: this.trash.hoverIndex != null ? "trash-active" : ""
-                    })
+                    m("span.glyphicon.glyphicon-plus",
+                        {onclick: _.bind(model.addMethod, cmpt)}
+                    ),
+                    " "
                 ])
             )
         ])
@@ -332,12 +328,10 @@ class componentEdit {
 class activityEdit {
     oninit(vnode) {
         this.dnd = new Dnd(vnode.attrs.obj.content)
-        this.trash = new Trash(this.dnd)
     }
 
     onupdate(vnode) {
         this.dnd.array = vnode.attrs.obj.content
-        this.trash.dnd = this.dnd
     }
 
     resizeInput(e) {
@@ -352,7 +346,7 @@ class activityEdit {
         else
             text = i18n.current.componentTitle
         span.text(text)
-        $(this).width(span.width() + 60)
+        $(this).width(span.width() + 30)
         m.redraw()
     }
 
@@ -401,15 +395,9 @@ class activityEdit {
                 )
             ]),
             m("div.panel-footer", [
-                m("span.glyphicon.glyphicon-plus", {onclick: _.bind(model.addComponent, activity)}),
-                m("span.glyphicon.glyphicon-trash",
-                    {
-                        ondragover: this.trash.ondragover,
-                        ondragleave: this.trash.ondragleave,
-                        ondrop: this.trash.ondrop,
-                        class: this.trash.hoverIndex != null ? "trash-active" : ""
-                    }
-                )
+                m("span.glyphicon.glyphicon-plus",
+                    {onclick: _.bind(model.addComponent, activity)}
+                ),
             ])
         ])
     }
