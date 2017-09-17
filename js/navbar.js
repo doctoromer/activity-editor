@@ -23,7 +23,9 @@ navbar = {
                         {onclick: model.toggleEdit.bind(model)})
                 ),
                 m("li",
-                    m("a.glyphicon.glyphicon-save", {onclick: activityActions.downloadActivity})
+                    m("a.glyphicon.glyphicon-save",
+                        {onclick: activityActions.downloadActivity}
+                    )
                 ),
                 m("li", [
                         m("input#fileReader.hidden[type='file']",
@@ -41,7 +43,11 @@ navbar = {
                         onsubmit: activityActions.renderPrint
                     },
                     m("input#render-input[type='hidden'][name='html']"),
-                    m("a", m("button[type='submit']", m("span.glyphicon.glyphicon-export")))
+                    m("a",
+                        m("button[type='submit']",
+                            m("span.glyphicon.glyphicon-export")
+                        )
+                    )
                 )),
                 m("li.dropdown", {class: !model.editMode ? "invisible" : ""}, [
                     m("a.dropdown-toggle[data-toggle='dropdown']", [
@@ -52,7 +58,7 @@ navbar = {
                     m("ul.dropdown-menu", Object.keys(i18n.langs).map((code) =>
                         m("li",
                             m("a",
-                                {onclick: _.partial(i18n.setLang.bind(i18n), code)},
+                                {onclick: i18n.setLang.bind(i18n, code)},
                                 i18n.langs[code].name
                             )
                         )
@@ -63,11 +69,13 @@ navbar = {
                         {onclick: model.toggleDirection.bind(model)}
                     )
                 ),
-                this.showWarning ? m("li",
-                    m("a",
-                        m("span.label.label-warning", "bad input")
+                this.showWarning 
+                    ? m("li",
+                        m("a",
+                            m("span.label.label-warning", "bad input")
+                        )
                     )
-                ) : ""
+                    : ""
             ])
         ])
     }
@@ -80,22 +88,22 @@ activityActions = {
     activityPrint: {
         view: function(vnode) {
             activity = vnode.attrs.obj
-            return m("article#main-container.panel.panel-default", {dir: activity.direction}, [
+            return m("article#main-container.panel.panel-default", {dir: activity.direction},
                 m("div.panel-body", [
                     m("h1", activity.title),
-                    activity.author != "" ? 
-                    m("div", m("h3", i18n.current.by + ": " + activity.author)) : 
-                    "",
+                    activity.author != ""
+                        ? m("div", m("h3", i18n.current.by + ": " + activity.author)) 
+                        : "",
                     m("h3", i18n.current.time + ": " + activity.content.map(sumTime).reduce((a, b) => a + b, 0)),
                     m.trust(marked(activity.preface)),
                     m.trust("&nbsp;"),
                     m("div.panel-group", activity.content.map((cmpt, cmptIndex) =>
                         cmpt.content.length === 1 && cmpt.title === ""
-                        ? m(componentViewSingleMethod, {obj: cmpt, index: cmptIndex})
-                        : m(componentView, {obj: cmpt, index: cmptIndex})
+                            ? m(componentViewSingleMethod, {obj: cmpt, index: cmptIndex})
+                            : m(componentView, {obj: cmpt, index: cmptIndex})
                     ))
-                 ])
-            ])
+                ])
+            )
         }
     },
 

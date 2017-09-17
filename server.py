@@ -38,12 +38,12 @@ CONTENT_DIR = '.'
 
 @app.route('/')
 def index():
-    return bottle.static_file('index.html', root=CONTENT_DIR)
+    return static('index.html')
 
 
-@app.route('/<path:path>')
-def static(path):
-    return bottle.static_file(path, root=CONTENT_DIR)
+@app.route('/<file_path:path>')
+def static(file_path):
+    return bottle.static_file(file_path, root=CONTENT_DIR)
 
 
 @app.route('/langs')

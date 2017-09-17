@@ -10,11 +10,18 @@ i18n = {
 
 // constructors for the model
 class Activity {
-    constructor() {
+    constructor(code) {
+        if(code) {
+            this.language = code
+            this.direction = i18n.langs[code].defaultDirection
+        }
+        else {   
+            this.language = i18n.current.code
+            this.direction = i18n.current.defaultDirection
+        }
+
         this.title = ""
         this.author = ""
-        this.language = i18n.current.code
-        this.direction = i18n.current.defaultDirection
         this.preface = ""
         this.content = [new Component()]
     }

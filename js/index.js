@@ -6,7 +6,7 @@ function main() {
         if(localStorage.activity)
             return JSON.parse(localStorage.activity)
         else
-            return m.request({url: "template.json"})
+            return new Activity("he")
     })
     .then((activity) => {
         model.activity = activity
@@ -23,7 +23,7 @@ function main() {
 
     m.request({
         url: "/css/printStyle.css",
-        deserialize: _.identity
+        deserialize: (data) => data
     })
     .then((value) => activityActions.printCss = value)
 

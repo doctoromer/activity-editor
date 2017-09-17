@@ -19,9 +19,13 @@ borderColors = {
 activityRootSelector = "article#main-container.panel.panel-default"
 activityRootSelector += ".col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3"
 
-function sumTime(obj) {
-    return obj.content.map((a) => !isNaN(a.time) ? a.time : 0).reduce((a, b) => a + b, 0)
+function sumComponentTime(cmpt) {
+    return cmpt.content.map((a) => !isNaN(a.time) ? a.time : 0).reduce((a, b) => a + b, 0)
 }
+
+function sumActivityTime(activity) {
+    return activity.content.map(sumComponentTime).reduce((a, b) => a + b, 0)
+}``
 
 class methodView {
     view(vnode) {
@@ -34,10 +38,12 @@ class methodView {
             m("div",
                 m.trust(marked(mthd.content))
             ),
-            mthd.equipment != "" ? m("div", [
-               m("strong" + pullDirection, i18n.current.equipment + ": "),
-               mthd.equipment
-            ]) : "",
+            mthd.equipment != ""
+                ? m("div", [
+                   m("strong" + pullDirection, i18n.current.equipment + ": "),
+                   mthd.equipment
+                ])
+                : "",
             m("div", [
                 m("strong" + pullDirection, i18n.current.time + ": "),
                 mthd.time
@@ -58,16 +64,16 @@ class componentView {
                 m("div.panel-body", [
                     m("div", [
                         m("strong.pull-" + model.directionName(true), i18n.current.time + ": "),
-                        sumTime(cmpt)
+                        sumComponentTime(cmpt)
                     ]),
                     m("div",
                         m.trust(marked(cmpt.preface))
                     ),
-                    cmpt.content.length === 1 ? 
-                    m(methodView, {obj: cmpt.content[0]}) :
-                    m("div", m("section.list-group", cmpt.content.map((mthd, mthdIndex) =>
-                        m(methodView, {obj: mthd, index: mthdIndex})
-                    )))
+                    cmpt.content.length === 1
+                        ? m(methodView, {obj: cmpt.content[0]})
+                        : m("div", m("section.list-group", cmpt.content.map((mthd, mthdIndex) =>
+                            m(methodView, {obj: mthd, index: mthdIndex})
+                        )))
                 ])
             )
         ])
@@ -78,18 +84,18 @@ class componentViewSingleMethod {
     view(vnode) {
         var cmpt = vnode.attrs.obj
         var index = vnode.attrs.index
-        var mthd = _.cloneDeep(cmpt.content[0])
+        var mthd = JSON.parse(JSON.stringify(cmpt.content[0]))
         mthd.title = i18n.current[cmpt.type] + " - " + mthd.title
 
         return m("section.panel.border-" + colors[cmpt.type],
             m("div",
                 {class: colors[cmpt.type]},
                 m("div.panel-body", 
-                    cmpt.content.length === 1 ? 
-                    m(methodView, {obj: mthd}) :
-                    m("div", m("section.list-group", cmpt.content.map((mthd, mthdIndex) =>
-                        m(methodView, {obj: mthd, index: mthdIndex})
-                    )))
+                    cmpt.content.length === 1 
+                        ? m(methodView, {obj: mthd})
+                        : m("div", m("section.list-group", cmpt.content.map(
+                            (mthd, mthdIndex) => m(methodView, {obj: mthd, index: mthdIndex})
+                        )))
                 )
             )
         )
@@ -102,16 +108,16 @@ class activityView {
         return m(activityRootSelector, {dir: activity.direction}, [
             m("div.panel-body", [
                 m("h1", activity.title),
-                activity.author != "" ? 
-                m("div", m("h3", i18n.current.by + ": " + activity.author)) : 
-                "",
-                m("h3", i18n.current.time + ": " + activity.content.map(sumTime).reduce((a, b) => a + b, 0)),
+                activity.author != ""
+                    ? m("div", m("h3", i18n.current.by + ": " + activity.author))
+                    : "",
+                m("h3", i18n.current.time + ": " + sumActivityTime(activity)),
                 m.trust(marked(activity.preface)),
                 m.trust("&nbsp;"),
                 m("div.panel-group", activity.content.map((cmpt, cmptIndex) =>
                     cmpt.content.length === 1 && cmpt.title === ""
-                    ? m(componentViewSingleMethod, {obj: cmpt, index: cmptIndex})
-                    : m(componentView, {obj: cmpt, index: cmptIndex})
+                        ? m(componentViewSingleMethod, {obj: cmpt, index: cmptIndex})
+                        : m(componentView, {obj: cmpt, index: cmptIndex})
                 ))
              ])
         ])
@@ -132,50 +138,49 @@ class methodEdit {
         this.draggable = false
     }
 
+    methodFamilies() {
+        return ["contest", "action", "representation",
+               "creative", "inspiration", "discussion",
+               "thinking", "sharing", "simulation",
+               "reflection", "explanation", "decomposition"]
+    }
+
     view(vnode) {
         var mthd = vnode.attrs.obj
         var index = vnode.attrs.index
+        var dnd = this.dnd
+        var src = dnd.srcIndex
+        var dst = dnd.dstIndex
 
         var attrs = {
-            ondragstart: _.partial(this.dnd.ondragstart, index).bind(this.dnd),
-            ondragend: _.partial(this.dnd.ondragend, index).bind(this.dnd),
-            ondragover: _.partial(this.dnd.ondragover, index, this.dnd).bind(this.dnd),
-            ondrop: _.partial(this.dnd.ondrop, index).bind(this.dnd),
+            ondragstart: dnd.ondragstart.bind(dnd, index),
+            ondragend: dnd.ondragend.bind(dnd, index),
+            ondragover: dnd.ondragend.bind(dnd, index, dnd),
+            ondrop: dnd.ondrop.bind(dnd, index),
             onclick: (e) => e.stopPropagation(),
             draggable: this.draggable,
             class: ""
         }
 
-        if(this.dnd.srcIndex === index)
+        if(src === index)
             attrs.class += "transit "
 
-        if(this.dnd.dstIndex === index && this.dnd.dstIndex != this.dnd.srcIndex)
+        if(dst === index && dst != src)
             attrs.class += "active"
 
         return m("div.list-group-item", attrs, [
-            vnode.attrs.cmpt.type === "content" ?
-                m("select.form-control.inline",
+            vnode.attrs.cmpt.type === "content"
+                ? m("select.form-control.inline",
                     {
                         onclick: (e) => e.stopPropagation(),
                         onchange: m.withAttr("value", model.setTitle, mthd),
                         value: mthd.title
                     },
-                    [
-                        m("option",{value: i18n.current.contest}, i18n.current.contest),
-                        m("option",{value: i18n.current.action}, i18n.current.action),
-                        m("option",{value: i18n.current.representation}, i18n.current.representation),
-                        m("option",{value: i18n.current.creative}, i18n.current.creative),
-                        m("option",{value: i18n.current.inspiration}, i18n.current.inspiration),
-                        m("option",{value: i18n.current.discussion}, i18n.current.discussion),
-                        m("option",{value: i18n.current.thinking}, i18n.current.thinking),
-                        m("option",{value: i18n.current.sharing}, i18n.current.sharing),
-                        m("option",{value: i18n.current.simulation}, i18n.current.simulation),
-                        m("option",{value: i18n.current.reflection}, i18n.current.reflection),
-                        m("option",{value: i18n.current.explanation}, i18n.current.explanation),
-                        m("option",{value: i18n.current.decomposition}, i18n.current.decomposition)
-                    ]
-                ) :
-                m("h4[contenteditable='true']",
+                    this.methodFamilies().map(
+                        (family) => m("option",{value: i18n.current[family]}, i18n.current[family])
+                    )
+                )
+                : m("h4[contenteditable='true']",
                     {
                         oninput: m.withAttr("innerHTML", model.setTitle, mthd),
                         placeholder: i18n.current.methodTitle
@@ -183,7 +188,12 @@ class methodEdit {
                     m.trust(mthd.title)
                 ),
             m("span.glyphicon.glyphicon-remove.pull-" + model.directionName(false),
-                {onclick: () => model.removeMethod(index, vnode.attrs.cmpt)}
+                {
+                    onclick: (e) => {
+                        e.stopPropagation()
+                        model.removeMethod(index, vnode.attrs.cmpt)
+                    }
+                }
             ),
             m("textarea",
                 {
@@ -242,24 +252,27 @@ class componentEdit {
         var cmpt = vnode.attrs.obj
         var index = vnode.attrs.index
         var cmptDnd = vnode.attrs.dnd
+        var src = cmptDnd.srcIndex
+        var dst = cmptDnd.dstIndex
+
         var panelAttrs = {
             class: "border-" + borderColors[cmpt.type]
         }
+
         var headerAttrs = {
-            ondragstart: _.partial(cmptDnd.ondragstart, index).bind(cmptDnd),
-            ondragend: _.partial(cmptDnd.ondragend, index).bind(cmptDnd),
-            ondragover: _.partial(cmptDnd.ondragover, index, cmptDnd).bind(cmptDnd),
-            ondrop: _.partial(cmptDnd.ondrop, index).bind(cmptDnd),
-            onclick: _.identity,
+            ondragstart: cmptDnd.ondragstart.bind(cmptDnd, index),
+            ondragend: cmptDnd.ondragend.bind(cmptDnd, cmptDnd, index),
+            ondragover: cmptDnd.ondragover.bind(cmptDnd, index, cmptDnd),
+            ondrop: cmptDnd.ondrop.bind(cmptDnd, index),
             draggable: this.draggable,
             href: "#collapseView" + index,
             "data-target": "#collapseView" + index,
             class: colors[cmpt.type]
         }
 
-        if(cmptDnd.srcIndex === index)
+        if(src === index)
             headerAttrs.class += " transit"
-        if(cmptDnd.dstIndex === index && cmptDnd.dstIndex != cmptDnd.srcIndex)
+        if(dst === index && dst != src)
             panelAttrs.class += " panel-primary"
 
         return m("section.panel", panelAttrs, [
@@ -291,14 +304,19 @@ class componentEdit {
                     }
                 ),
                 m("span.glyphicon.glyphicon-remove.pull-" + model.directionName(false),
-                    {onclick: () => model.removeComponent(index)}
+                    {
+                        onclick: (e) => {
+                            e.stopPropagation()
+                            model.removeComponent(index)
+                        }
+                    }
                 )
             ]),
             m("div#collapseView" + index + ".panel-collapse.collapse",
                 m("div.panel-body",
                     m("div", [
                         m("strong", i18n.current.time + ": "),
-                        sumTime(cmpt)
+                        sumComponentTime(cmpt)
                     ]),
                     m("textarea",
                         {
@@ -316,7 +334,7 @@ class componentEdit {
                 ),
                 m("div.panel-footer", [
                     m("span.glyphicon.glyphicon-plus",
-                        {onclick: _.bind(model.addMethod, cmpt)}
+                        {onclick: model.addMethod.bind(cmpt)}
                     ),
                     " "
                 ])
@@ -380,7 +398,7 @@ class activityEdit {
                     },
                     m.trust(activity.author)
                 ),
-                m("h3", i18n.current.time + ": " + activity.content.map(sumTime).reduce((a, b) => a + b, 0)),
+                m("h3", i18n.current.time + ": " + sumActivityTime(activity)),
                 m("textarea",
                     {
                         oninput: m.withAttr("value", model.setPreface, activity),
@@ -396,7 +414,7 @@ class activityEdit {
             ]),
             m("div.panel-footer", [
                 m("span.glyphicon.glyphicon-plus",
-                    {onclick: _.bind(model.addComponent, activity)}
+                    {onclick: model.addComponent.bind(activity)}
                 ),
             ])
         ])
