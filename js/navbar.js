@@ -94,7 +94,7 @@ activityActions = {
                     activity.author != ""
                         ? m("div", m("h3", i18n.current.by + ": " + activity.author)) 
                         : "",
-                    m("h3", i18n.current.time + ": " + activity.content.map(sumTime).reduce((a, b) => a + b, 0)),
+                    m("h3", i18n.current.time + ": " + activity.content.map(sumComponentTime).reduce((a, b) => a + b, 0)),
                     m.trust(marked(activity.preface)),
                     m.trust("&nbsp;"),
                     m("div.panel-group", activity.content.map((cmpt, cmptIndex) =>
