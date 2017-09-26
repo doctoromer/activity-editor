@@ -155,7 +155,7 @@ class methodEdit {
         var attrs = {
             ondragstart: dnd.ondragstart.bind(dnd, index),
             ondragend: dnd.ondragend.bind(dnd, index),
-            ondragover: dnd.ondragend.bind(dnd, index, dnd),
+            ondragover: dnd.ondragover.bind(dnd, index, dnd),
             ondrop: dnd.ondrop.bind(dnd, index),
             onclick: (e) => e.stopPropagation(),
             draggable: this.draggable,

@@ -12,7 +12,7 @@ except ImportError:
         from weasyprint import HTML
     except ImportError:
         import sys
-        print('no pdfkit or weasyPrint is installed. exiting...')
+        sys.stderr.write('no pdfkit or weasyPrint is installed. exiting...\n')
         sys.exit(1)
     else:
         is_server = True
@@ -20,9 +20,17 @@ except ImportError:
         def convert(html):
             return HTML(string=html).write_pdf()
 else:
+    import platform
     is_server = False
-    config = pdfkit.configuration(
-        wkhtmltopdf='wkhtmltopdf/bin/wkhtmltopdf.exe')
+    os_name = platform.system()
+    if os_name == 'Windows':
+        config = pdfkit.configuration(
+            wkhtmltopdf='wkhtmltopdf/bin/wkhtmltopdf.exe')
+    elif os_name == 'Linux':
+        config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
+    else:
+        sys.stderr.write('OS is not supproted. exiting...\n')
+        sys.exit(1)
 
     def convert(html):
         try:

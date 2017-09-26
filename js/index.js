@@ -1,3 +1,4 @@
+console.time("load")
 function main() {
     m.request({url: "/langs"})
     .then((langs) => i18n.langs = langs)
@@ -19,6 +20,7 @@ function main() {
             }
         )
         setInterval(() => localStorage.activity = JSON.stringify(model.activity), 3000)
+        console.timeEnd("load")
     })
 
     m.request({

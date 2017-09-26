@@ -82,7 +82,6 @@ model = {
         this.content.push(new Component())
     },
     removeComponent: function(index) {
-        console.log(this)
         this.activity.content.splice(index, 1)
     },
     setMethodContent: function(value) {
@@ -115,11 +114,14 @@ class Dnd {
     }
 
     ondragstart(index, event) {
+        console.log(event.type, this)
+        event.dataTransfer.setData('text/html', 'data')
         this.srcIndex = index
         dataTransfer.dnd = this
     }
 
     ondragend(index, event) {
+        console.log(event.type, this)
         this.srcIndex = null
         this.dstIndex = null
         dataTransfer.dnd = null
@@ -127,6 +129,7 @@ class Dnd {
 
     ondragover(index, dnd, event) {
         if(dataTransfer.dnd === this) {
+            console.log(event.type, this)
             event.preventDefault()
             if(this.dstIndex != index)
                 this.dstIndex = index
@@ -134,6 +137,7 @@ class Dnd {
     }
 
     ondrop(index, event) {
+        console.log(event.type, this)
         this.array.splice(this.dstIndex, 0, this.array.splice(this.srcIndex, 1)[0])
     }
 }

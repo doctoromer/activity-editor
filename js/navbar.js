@@ -148,7 +148,6 @@ activityActions = {
     },
 
     renderPrint: function() {
-        console.log("WATISDATis")
         hiddenRoot = document.getElementById("hidden-root")
         doc = hiddenRoot.contentDocument        
         m.render(doc.body, m(activityActions.activityPrint, {obj: model.activity}))
