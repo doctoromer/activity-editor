@@ -1,13 +1,9 @@
 navbar = {
     showWarning: false,
+    oninit: function() {
+        activityActions.initShortcuts()
+    },
     view: function(vnode) {
-
-        helperFunc = () => {
-            element = document.getElementById("fileReader")
-            element.click()
-            element.value = ""
-        }
-
         return m("nav.navbar.navbar-inverse.navbar-fixed-top.nav-flat", [
             m("ul.nav.navbar-nav", [
                 m("li",
@@ -15,12 +11,12 @@ navbar = {
                 ),
                 m("li",
                     m("a.glyphicon.glyphicon-file",
-                        {onclick: model.newActivity.bind(model)}
+                        {onclick: activityActions.newActivity}
                     )
                 ),
                 m("li",
                     m("a.glyphicon.glyphicon-" + (model.editMode ? "edit" : "check"),
-                        {onclick: model.toggleEdit.bind(model)})
+                        {onclick: activityActions.toggleEdit})
                 ),
                 m("li",
                     m("a.glyphicon.glyphicon-save",
@@ -31,10 +27,10 @@ navbar = {
                         m("input#fileReader.hidden[type='file']",
                             {onchange: activityActions.readActivity.bind(this)}
                         ),
-                        m("a.glyphicon.glyphicon-open", {onclick: helperFunc})
+                        m("a.glyphicon.glyphicon-open", {onclick: activityActions.loadActivity})
                     ]
                 ),
-                m("li", m("form",
+                m("li", m("form#exportForm",
                     {
                         method: "post",
                         ecntype: "multipart/form-data",
@@ -50,11 +46,7 @@ navbar = {
                     )
                 )),
                 m("li.dropdown", {class: !model.editMode ? "invisible" : ""}, [
-                    m("a.dropdown-toggle[data-toggle='dropdown']", [
-                        i18n.current.name,
-                        m("span.caret")]
-                    ),
-
+                    m("a.dropdown-toggle.glyphicon.glyphicon-globe[data-toggle='dropdown']"),
                     m("ul.dropdown-menu", Object.keys(i18n.langs).map((code) =>
                         m("li",
                             m("a",
@@ -65,8 +57,8 @@ navbar = {
                     ))
                 ]),
                 m("li", {class: !model.editMode ? "invisible" : ""},
-                    m("a.glyphicon.glyphicon-triangle-" + model.directionName(false),
-                        {onclick: model.toggleDirection.bind(model)}
+                    m("a.glyphicon.glyphicon-plus",
+                        {onclick: model.addComponent}
                     )
                 ),
                 this.showWarning 
@@ -84,6 +76,16 @@ navbar = {
 activityActions = {
     printCss: null,
     schema: null,
+
+    initShortcuts: function() {
+        Mousetrap.bind("mod+o", this.loadActivity)
+        Mousetrap.bind("mod+e", this.exportActivity)
+        Mousetrap.bind("mod+s", this.downloadActivity)
+        document.addEventListener("keydown", function(e) {
+            if (event.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey))
+                e.preventDefault()
+        }, false)
+    },
 
     activityPrint: {
         view: function(vnode) {
@@ -106,6 +108,9 @@ activityActions = {
             )
         }
     },
+
+    newActivity: model.setActivity.bind(model, new Activity()),
+    toggleEdit: model.toggleEdit.bind(model),
 
     readActivity: function(e) {
         file = document.getElementById("fileReader").files[0]
@@ -145,6 +150,21 @@ activityActions = {
         )
         baseName = model.activity.title ? model.activity.title : "activity"
         saveAs(blob, baseName + ".json")
+    },
+
+    loadActivity: function() {
+        element = document.getElementById("fileReader")
+        element.click()
+        element.value = ""
+    },
+
+    exportActivity: function() {
+        activityActions.renderPrint()
+        document.getElementById("exportForm").submit()
+    },
+
+    toggleDirection: function() {
+        model.toggleDirection.bind(model)()
     },
 
     renderPrint: function() {

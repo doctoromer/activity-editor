@@ -13,7 +13,7 @@ borderColors = {
     "project": "rgba-indigo-strong",
     "meeting": "rgba-blue-strong",
     "playing": "rgba-purple-strong",
-    "viewpoint": "rgba-yellow-strong" 
+    "viewpoint": "amber-lighten-2" 
 }
  
 activityRootSelector = "article#main-container.panel.panel-default"
@@ -310,10 +310,18 @@ class componentEdit {
                             model.removeComponent(index)
                         }
                     }
+                ),
+                m("span.glyphicon.glyphicon-plus.pull-" + model.directionName(false),
+                    {
+                        onclick: (e) => {
+                            e.stopPropagation()
+                            model.addMethod.bind(cmpt)()
+                        }
+                    }
                 )
             ]),
             m("div#collapseView" + index + ".panel-collapse.collapse",
-                m("div.panel-body",
+                m("div.panel-body", [
                     m("div", [
                         m("strong", i18n.current.time + ": "),
                         sumComponentTime(cmpt)
@@ -330,13 +338,7 @@ class componentEdit {
                         m("section#methodList" + index + ".list-group", cmpt.content.map((mthd, mthdIndex) =>
                             m(methodEdit, {obj: mthd, index: mthdIndex, cmpt: cmpt, dnd: this.mthdDnd})
                         ))
-                    ),
-                ),
-                m("div.panel-footer", [
-                    m("span.glyphicon.glyphicon-plus",
-                        {onclick: model.addMethod.bind(cmpt)}
-                    ),
-                    " "
+                    )
                 ])
             )
         ])
@@ -411,11 +413,6 @@ class activityEdit {
                     m(componentEdit, {obj: cmpt, index: cmptIndex, dnd: this.dnd})
                     )
                 )
-            ]),
-            m("div.panel-footer", [
-                m("span.glyphicon.glyphicon-plus",
-                    {onclick: model.addComponent.bind(activity)}
-                ),
             ])
         ])
     }

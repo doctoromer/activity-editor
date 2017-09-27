@@ -50,8 +50,8 @@ model = {
     activity: new Activity(),
     editMode: true,
 
-    newActivity: function() {
-        this.activity = new Activity()
+    setActivity: function(activity) {
+        this.activity = activity
     },
 
     toggleEdit: function() {
@@ -79,7 +79,7 @@ model = {
         this.type = value
     },
     addComponent: function(value) {
-        this.content.push(new Component())
+        model.activity.content.push(new Component())
     },
     removeComponent: function(index) {
         this.activity.content.splice(index, 1)

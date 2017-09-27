@@ -65,6 +65,10 @@ input.invisible-input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+input.invisible-input[type=number] {
+    -moz-appearance:textfield;
+}
+
 .invisible-input, .invisible-input:focus {
     border: none;
     outline: 0px solid transparent;
@@ -143,6 +147,11 @@ nav button:hover {
     color: white;
 }
 
+nav button {
+    margin: 0px;
+    padding: 15px;
+}
+
 /* override default bootstrap dropdown style */
 .dropdown-menu {
     min-width: 0px !important;
@@ -162,10 +171,6 @@ nav button:hover {
 /* Adjustments for mobile platforms */
 
 @media (max-width: 768px) {
-    #main-container {
-        margin-top: 40px;
-        margin-bottom: 0px;
-    }
     .nav-flat > ul {
         display: -webkit-flex;
         display: flex;
@@ -173,17 +178,37 @@ nav button:hover {
         align-items: center;
         float: none;
     }
+
     .nav-flat > ul {
         margin-top: 13px;
     }
-    .nav-flat li { display: inline; }
-    .nav-flat li a { display: inline; }
-    .nav-flat li form {display: inline; }
+
+    .nav-flat li {
+        display: inline;
+    }
+
+    .nav-flat li a {
+        display: inline;
+        padding: initial;
+    }
+
+    .nav-flat li form {
+        display: inline;
+    }
+
     .nav-flat li form button {
         display: inline;
         margin: 0px;
     }
-    .dropdown-menu li { display: block; }
+
+    .nav-flat button {
+        padding: initial;
+    }
+
+    .dropdown-menu li {
+        display: block;
+    }
+
     .dropdown-menu li a {
         display: block;
         color: #333 !important;

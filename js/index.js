@@ -10,7 +10,7 @@ function main() {
             return new Activity("he")
     })
     .then((activity) => {
-        model.activity = activity
+        model.setActivity(activity)
         i18n.setLang(activity.language)
         m.mount(document.getElementById("root"), 
             {
