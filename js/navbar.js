@@ -82,7 +82,7 @@ activityActions = {
         Mousetrap.bind("mod+e", this.exportActivity)
         Mousetrap.bind("mod+s", this.downloadActivity)
         document.addEventListener("keydown", function(e) {
-            if (event.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey))
+            if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey))
                 e.preventDefault()
         }, false)
     },

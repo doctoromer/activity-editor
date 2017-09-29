@@ -3,11 +3,18 @@ function main() {
     m.request({url: "/langs"})
     .then((langs) => i18n.langs = langs)
     .then(() => m.mount(document.getElementById("navbar-root"), navbar))
+    .then(() => m.request({url: "/schema.json"}))
+    .then((schema) => activityActions.schema = schema)
     .then(() => {
         if(localStorage.activity)
-            return JSON.parse(localStorage.activity)
-        else
-            return new Activity("he")
+            try {
+                activity = JSON.parse(localStorage.activity)
+                valid = tv4.validate(activity, activityActions.schema)
+                if(valid)
+                    return activity
+            }
+            catch(e) {}
+        return new Activity("he")
     })
     .then((activity) => {
         model.setActivity(activity)
@@ -28,9 +35,6 @@ function main() {
         deserialize: (data) => data
     })
     .then((value) => activityActions.printCss = value)
-
-    m.request({url: "/schema.json"})
-    .then((value) => activityActions.schema = value)
 }
 
 window.onload = main

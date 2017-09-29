@@ -15,9 +15,13 @@ class Activity {
             this.language = code
             this.direction = i18n.langs[code].defaultDirection
         }
-        else {   
+        else if(i18n.current) {   
             this.language = i18n.current.code
             this.direction = i18n.current.defaultDirection
+        }
+        else {
+            this.language = "he"
+            this.direction = "rtl"
         }
 
         this.title = ""
