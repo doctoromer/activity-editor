@@ -6,21 +6,23 @@ function main() {
     .then(() => m.request({url: "/schema.json"}))
     .then((schema) => activityActions.schema = schema)
     .then(() => {
-        if(localStorage.activity) {
+        activity = null
+        if(localStorage.activity !== null) {
             try {
                 activity = JSON.parse(localStorage.activity)
                 valid = tv4.validate(activity, activityActions.schema)
-                if(valid)
-                    return activity
+                if(!valid) {
+                    activity = null
+                }
             }
-            catch(e) {
-                return new Activity("he")
-            }
-            return activity
+            catch(e) {}
         }
-        else {
-            return new Activity("he")
+
+        if (activity === null) {
+            activity = new Activity("he")
         }
+
+        return activity
     })
     .then((activity) => {
         model.setActivity(activity)
